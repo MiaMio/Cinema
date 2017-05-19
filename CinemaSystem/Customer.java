@@ -1,9 +1,11 @@
 package CinemaSystem;
-
+import java.util.Date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+
 
 public class Customer {
 	private String customer_account;
@@ -83,5 +85,21 @@ public class Customer {
 		}
 		System.out.println("Login fail for wrong account or wrong password.");
 		return false;
+	}
+	
+	public void comment(Connection connection, String comment, Film film, int score)throws Exception{
+		Date date=new Date();
+		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+		String now_date=simpleDateFormat.format(date);
+		PreparedStatement preparedStatement=connection.prepareStatement("insert into comments(comment_film, comment_customer, comment_content, comment_time, comment_score)"
+				+ "values(?, ?, ?, ?, ?)");
+		preparedStatement.setString(1, film.getFilm_name());
+		preparedStatement.setString(2, customer_account);
+		preparedStatement.setString(3, comment);
+		preparedStatement.setString(4, now_date);
+		preparedStatement.setInt(5, score);
+		preparedStatement.executeUpdate();
+		System.out.println("comment success");
+		
 	}
 }

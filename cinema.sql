@@ -54,7 +54,7 @@ CREATE TABLE `comments` (
   `comment_time` varchar(100) NOT NULL,
   `comment_score` int(11) NOT NULL,
   PRIMARY KEY (`comment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +63,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,'avatar','peter','good','2017-5-16',5),(2,'avatar','judy','suck','2017-5-16',5),(3,'avatar','alice','so so','2017-5-16',5);
+INSERT INTO `comments` VALUES (1,'avatar','peter','good','2017-5-16',5),(2,'avatar','judy','suck','2017-5-16',5),(3,'avatar','alice','so so','2017-5-16',5),(4,'avatar','jack','yes, this is a suck film','2017-05-16',0);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,10 +101,10 @@ DROP TABLE IF EXISTS `film`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `film` (
   `film_id` int(11) NOT NULL AUTO_INCREMENT,
-  `film_name` varchar(20) NOT NULL,
+  `film_name` varchar(100) NOT NULL,
   `film_abstract` varchar(1000) NOT NULL,
   PRIMARY KEY (`film_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,7 +113,7 @@ CREATE TABLE `film` (
 
 LOCK TABLES `film` WRITE;
 /*!40000 ALTER TABLE `film` DISABLE KEYS */;
-INSERT INTO `film` VALUES (4,'avatar','a suck film'),(5,'titanic','a love story'),(6,'naruto','a music story');
+INSERT INTO `film` VALUES (1,'Chun Jiao jiu Zhi Ming','A couple who have been together for several years try to \r\n decide if they should stay together.'),(2,'Guardians of the Galaxy','Set to the backdrop of Awesome Mixtape #2, \'Guardians of the Galaxy \r\n Vol. 2\' continues the team\'s adventures as they unravel the mystery of \r\n Peter Quill\'s true parentage.'),(3,'Power Rangers','A group of high-school students, who are infused with unique superpowers, \r\n harness their abilities in order to save the world.'),(4,'Dangal','Former wrestler Mahavir Singh Phogat and his two wrestler daughters struggle \r\n towards glory at the Commonwealth Games in the face of societal oppression.');
 /*!40000 ALTER TABLE `film` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,4 +182,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-16 13:25:51
+-- Dump completed on 2017-05-19 12:08:54
