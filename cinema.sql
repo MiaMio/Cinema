@@ -54,7 +54,7 @@ CREATE TABLE `comments` (
   `comment_time` varchar(100) NOT NULL,
   `comment_score` int(11) NOT NULL,
   PRIMARY KEY (`comment_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +63,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,'avatar','peter','good','2017-5-16',5),(2,'avatar','judy','suck','2017-5-16',5),(3,'avatar','alice','so so','2017-5-16',5),(4,'avatar','jack','yes, this is a suck film','2017-05-16',0);
+INSERT INTO `comments` VALUES (1,'avatar','peter','good','2017-5-16',5),(2,'avatar','judy','suck','2017-5-16',5),(3,'avatar','alice','so so','2017-5-16',5),(4,'avatar','jack','yes, this is a suck film','2017-05-16',0),(5,'Chun Jiao jiu Zhi Ming','jack','this is a very moving film!','2017-05-21',5),(6,'Chun Jiao jiu Zhi Ming','jack','this is a very moving film!','2017-05-21',5),(7,'Chun Jiao jiu Zhi Ming','jack','This is a very moving film','2017-05-21',5);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -79,7 +79,7 @@ CREATE TABLE `customer` (
   `customer_account` varchar(20) NOT NULL,
   `customer_pwd` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,7 +88,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES (1,'jack','jack123');
+INSERT INTO `customer` VALUES (1,'jack','jack123'),(2,'alice','alice123'),(3,'jack','');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -126,13 +126,13 @@ DROP TABLE IF EXISTS `ticket`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ticket` (
   `ticket_id` int(11) NOT NULL AUTO_INCREMENT,
-  `ticket_film` varchar(20) NOT NULL,
+  `ticket_film` varchar(50) NOT NULL,
   `ticket_value` int(11) NOT NULL,
   `ticket_customer` varchar(20) NOT NULL,
   `ticket_time` varchar(20) NOT NULL,
-  `ticket_cinema` varchar(20) NOT NULL,
+  `ticket_cinema` varchar(50) NOT NULL,
   PRIMARY KEY (`ticket_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,7 +141,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES (1,'avatar',50,'jack','2017-5-15','yonghua'),(2,'avatar',50,'jack','2017-5-15','yonghua');
+INSERT INTO `ticket` VALUES (1,'avatar',50,'jack','2017-5-15','yonghua'),(2,'avatar',50,'jack','2017-5-15','yonghua'),(3,'Chun Jiao jiu Zhi Ming',50,'jack','05-24 11:45','UA Cinema'),(4,'Chun Jiao jiu Zhi Ming',50,'jack','05-24 11:45','UA Cinema');
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +160,7 @@ CREATE TABLE `timetable` (
   `cinema` varchar(30) NOT NULL,
   `time_film_price` int(11) NOT NULL,
   PRIMARY KEY (`time_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +169,7 @@ CREATE TABLE `timetable` (
 
 LOCK TABLES `timetable` WRITE;
 /*!40000 ALTER TABLE `timetable` DISABLE KEYS */;
-INSERT INTO `timetable` VALUES (1,'2017-5-15','avatar',49,'yonghua',50);
+INSERT INTO `timetable` VALUES (1,'2017-5-15','avatar',49,'yonghua',50),(2,'05-24 11:35','Dangal',50,'SFC Cinema',50),(3,'05-24 14:10','Dangal',50,'SFC Cinema',50),(4,'05-24 16:45','Dangal',50,'SFC Cinema',50),(5,'05-24 19:20','Dangal',50,'SFC Cinema',50),(6,'05-24 22:00','Dangal',50,'SFC Cinema',50),(7,'05-24 11:35','Dangal',50,'UA Cinema',50),(8,'05-24 13:00','Dangal',50,'UA Cinema',50),(9,'05-24 14:10','Dangal',50,'UA Cinema',50),(10,'05-24 15:35','Dangal',50,'UA Cinema',50),(11,'05-24	16:45','Dangal',50,'UA Cinema',50),(12,'05-24 11:45','Guardians of the Galaxy',50,'SFC Cinema',50),(13,'05-24 14:20','Guardians of the Galaxy',50,'SFC Cinema',50),(14,'05-24 16:55','Guardians of the Galaxy',50,'SFC Cinema',50),(15,'05-24 19:30','Guardians of the Galaxy',50,'SFC Cinema',50),(16,'05-24 22:05','Guardians of the Galaxy',50,'SFC Cinema',50),(17,'05-24 16:30','Guardians of the Galaxy',50,'UA Cinema',50),(18,'05-24 19:00','Guardians of the Galaxy',50,'UA Cinema',50),(19,'05-24 21:30','Guardians of the Galaxy',50,'UA Cinema',50),(20,'05-24 11:45','Power Rangers',50,'UA Cinema',50),(21,'05-24 13:45','Power Rangers',50,'UA Cinema',50),(22,'05-24 14:45','Power Rangers',50,'UA Cinema',50),(23,'05-24 15:45','Power Rangers',50,'UA Cinema',50),(24,'05-24 11:00','Power Rangers',50,'SFC Cinema',50),(25,'05-24 13:00','Power Rangers',50,'SFC Cinema',50),(26,'05-24 14:00','Power Rangers',50,'SFC Cinema',50),(27,'05-24 16:00','Power Rangers',50,'SFC Cinema',50),(28,'05-24 11:45','Chun Jiao Jiu Zhi Ming',49,'UA Cinema',50),(29,'05-24 13:45','Chun Jiao Jiu Zhi Ming',50,'UA Cinema',50),(30,'05-24 14:45','Chun Jiao Jiu Zhi Ming',50,'UA Cinema',50),(31,'05-24 15:45','Chun Jiao Jiu Zhi Ming',50,'UA Cinema',50),(32,'05-24 11:00','Chun Jiao Jiu Zhi Ming',50,'SFC Cinema',50),(33,'05-24 13:00','Chun Jiao Jiu Zhi Ming',50,'SFC Cinema',50),(34,'05-24 14:00','Chun Jiao Jiu Zhi Ming',50,'SFC Cinema',50),(35,'05-24 16:00','Chun Jiao Jiu Zhi Ming',50,'SFC Cinema',50);
 /*!40000 ALTER TABLE `timetable` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -182,4 +182,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-05-19 12:08:54
+-- Dump completed on 2017-05-21 21:02:33
