@@ -31,7 +31,7 @@ public class Customer {
 	public void setCustomer_pwd(String customer_pwd) {
 		this.customer_pwd = customer_pwd;
 	}
-	public void purchase(Ticket ticket, Connection connection) throws SQLException{
+	public boolean purchase(Ticket ticket, Connection connection) throws SQLException{
 		PreparedStatement preparedStatement=connection.prepareStatement("select seats from timetable where time_value=? and time_film=? and cinema=?");
 		preparedStatement.setString(1, ticket.getTicket_time());
 		preparedStatement.setString(2, ticket.getTicket_film());
@@ -53,25 +53,27 @@ public class Customer {
 			preparedStatement3.setString(3, ticket.getTicket_film());
 			preparedStatement3.setString(4, ticket.getTicket_cinema());
 			preparedStatement3.executeUpdate();
+			return true;
 		}
 		else{
 			System.out.println("purchase fail");
+			return false;
 		}
 	}
-	public void signup(Connection connection)throws Exception{
-		PreparedStatement preparedStatement=connection.prepareStatement("select id from customer where customer_account=? and customer_pwd=?");
+	public boolean signup(Connection connection)throws Exception{
+		PreparedStatement preparedStatement=connection.prepareStatement("select id from customer where customer_account=?");
 		preparedStatement.setString(1, customer_account);
-		preparedStatement.setString(2, customer_pwd);
 		ResultSet resultSet=preparedStatement.executeQuery();
 		if(resultSet.next()){
 			System.out.println("Account exists!");
-			return;
+			return false;
 		}
 		PreparedStatement preparedStatement2=connection.prepareStatement("insert into customer(customer_account, customer_pwd) values(?, ?)");
 		preparedStatement2.setString(1, customer_account);
 		preparedStatement2.setString(2, customer_pwd);
 		preparedStatement2.executeUpdate();
 		System.out.println("sign up success");
+		return true;
 	}
 	
 	public boolean login(Connection connection)throws Exception{
@@ -87,13 +89,13 @@ public class Customer {
 		return false;
 	}
 	
-	public void comment(Connection connection, String comment, Film film, int score)throws Exception{
+	public void comment(Connection connection, String comment, String film_name, int score)throws Exception{
 		Date date=new Date();
 		SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
 		String now_date=simpleDateFormat.format(date);
 		PreparedStatement preparedStatement=connection.prepareStatement("insert into comments(comment_film, comment_customer, comment_content, comment_time, comment_score)"
 				+ "values(?, ?, ?, ?, ?)");
-		preparedStatement.setString(1, film.getFilm_name());
+		preparedStatement.setString(1, film_name);
 		preparedStatement.setString(2, customer_account);
 		preparedStatement.setString(3, comment);
 		preparedStatement.setString(4, now_date);
