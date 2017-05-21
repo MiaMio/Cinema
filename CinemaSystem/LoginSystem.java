@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -40,6 +39,58 @@ public class LoginSystem extends Application {
 		gridPane.add(sceneTitle, 0, 0);
 		return gridPane;
 	}
+	public void register(Connection connection){
+		Stage stage=new Stage();
+		stage.setTitle("Register");
+		GridPane gridPane=new GridPane();
+		gridPane.setAlignment(Pos.CENTER);
+		gridPane.setHgap(10);
+		gridPane.setVgap(10);
+		Text sceneTitle=new Text("Register");
+		gridPane.add(sceneTitle, 0, 0);
+		Label label1=new Label("account: ");
+		gridPane.add(label1, 0, 1);
+		Label label2=new Label("password: ");
+		gridPane.add(label2, 0, 2);
+		TextField textField=new TextField();
+		gridPane.add(textField, 1, 1);
+		PasswordField passwordField=new PasswordField();
+		gridPane.add(passwordField, 1, 2);
+		Button button=new Button("Confirm and Login");
+		gridPane.add(button, 1, 3);
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String name=textField.getText();
+				String pwd=passwordField.getText();
+				Customer customer=new Customer(name, pwd);
+				try {
+					if(customer.signup(connection)){
+						stage.close();
+						Stage stage2=new Stage();
+						PurchaseSystem purchaseSystem=new PurchaseSystem();
+						purchaseSystem.setCustomer(customer);
+						purchaseSystem.start(stage2);
+					}
+					else{
+						Alert alert=new Alert(Alert.AlertType.INFORMATION);
+						alert.setTitle("Register fail");
+						alert.setHeaderText("Register fail");
+						alert.setContentText("Account exists!");
+						alert.initOwner(stage);
+						alert.show();
+						System.out.println("Register fail");
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		Scene scene=new Scene(gridPane, 300, 300);
+		stage.setScene(scene);
+		stage.show();
+	}
 	public void start(Stage primaryStage)throws Exception{
 		Connection connection;
 		Class.forName("com.mysql.jdbc.Driver");
@@ -50,7 +101,7 @@ public class LoginSystem extends Application {
 		gridPane.setHgap(10);
 		gridPane.setVgap(10);
 //		gridPane.setPadding(new Insets(10, 10, 10, 10));
-		Text sceneTitle=new Text("welcome");
+		Text sceneTitle=new Text("Login");
 		gridPane.add(sceneTitle, 0, 0);
 		Label account=new Label("account: ");
 		gridPane.add(account, 0, 1);
@@ -61,10 +112,14 @@ public class LoginSystem extends Application {
 		PasswordField passwordField=new PasswordField();
 		gridPane.add(passwordField, 1, 2);
 		Button button=new Button("Sign in");
-//		HBox hBox=new HBox();
+		HBox hBox=new HBox();
+		hBox.setSpacing(10);
 //		hBox.setAlignment(Pos.BOTTOM_RIGHT);
-//		hBox.getChildren().add(button);
-		gridPane.add(button, 1, 4);
+		hBox.getChildren().add(button);
+//		gridPane.add(button, 1, 4);
+		Button button2=new Button("Resigster");
+		hBox.getChildren().add(button2);
+		gridPane.add(hBox, 1, 4);
 		
 		button.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -101,6 +156,15 @@ public class LoginSystem extends Application {
 				// TODO Auto-generated method stub
 //				alert_message("Fail to sign in", "wrong password or account", primaryStage);
 //				primaryStage.close();
+			}
+		});
+		
+		button2.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				primaryStage.close();
+				register(connection);
 			}
 		});
 		
