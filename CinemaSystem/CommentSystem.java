@@ -3,7 +3,7 @@ package CinemaSystem;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
+import java.sql.SQLException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -11,24 +11,39 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class CommentSystem extends Application{
 	private Stage preStage;
 	private Connection connection;
 	private Customer customer;
+	
+	
+	
 	public CommentSystem(Stage preStage, Connection connection, Customer customer) {
 		this.connection=connection;
 		this.preStage=preStage;
 		this.customer=customer;
+	}
+	
+	public void alert_message(String header, String message, Stage stage){
+		Alert alert=new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Confirm");
+		alert.setHeaderText(header);
+		alert.setContentText(message);
+		alert.initOwner(stage);
+		alert.show();
 	}
 	public HBox upPane(){
 		HBox hBox=new HBox();
@@ -41,7 +56,7 @@ public class CommentSystem extends Application{
 		return hBox;
 	}
 	
-	public BorderPane commentPane(Connection connection, String film_name){
+	public BorderPane commentPane(Connection connection, String film_name, Stage stage){
 		BorderPane borderPane=new BorderPane();
 		TextArea textArea=new TextArea();
 		borderPane.setCenter(textArea);
@@ -66,17 +81,17 @@ public class CommentSystem extends Application{
 				String comment=textArea.getText();
 				int score=choiceBox.getValue();
 				try {
+					comment=StringHelper.cut(comment, 70);
 					customer.comment(connection, comment, film_name, score);
+					stage.close();
+					alert_message("Confirm", "Comment success", stage);
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		});
-		
-		
-		
-		
 		return borderPane;
 	}
 	
@@ -114,7 +129,7 @@ public class CommentSystem extends Application{
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
 					Stage commentStage=new Stage();
-					Scene commentScene=new Scene(commentPane(connection, film), 500, 500);
+					Scene commentScene=new Scene(commentPane(connection, film, commentStage), 500, 500);
 					commentStage.setScene(commentScene);
 					commentStage.initOwner(nowStage);
 					commentStage.show();

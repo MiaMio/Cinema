@@ -1,5 +1,8 @@
 package CinemaSystem;
 import java.util.Date;
+
+import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -103,5 +106,25 @@ public class Customer {
 		preparedStatement.executeUpdate();
 		System.out.println("comment success");
 		
+	}
+	
+	public void delete(Connection connection, Ticket ticket)throws Exception{
+		PreparedStatement preparedStatement=connection.prepareStatement("delete from timetable where time_value=? and time_film=? and cinema=?");
+		preparedStatement.setString(1, ticket.getTicket_time());
+		preparedStatement.setString(2, ticket.getTicket_film());
+		preparedStatement.setString(3, ticket.getTicket_cinema());
+		preparedStatement.executeUpdate();
+	}
+	
+	public void add(Connection connection, Ticket ticket, int seats)throws Exception{
+		PreparedStatement preparedStatement=connection.prepareStatement("insert into timetable(time_value, time_film, seats, cinema, time_film_price) "
+				+ "values(?, ?, ?, ?, ?)");
+		preparedStatement.setString(1, ticket.getTicket_time());
+		preparedStatement.setString(2, ticket.getTicket_film());
+		preparedStatement.setInt(3, seats);
+		preparedStatement.setString(4, ticket.getTicket_cinema());
+		preparedStatement.setInt(5, ticket.getTicket_value());
+		preparedStatement.executeUpdate();
+		System.out.println("insert success");
 	}
 }
