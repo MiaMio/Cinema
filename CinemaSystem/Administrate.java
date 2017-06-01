@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Administrate {
@@ -31,7 +32,7 @@ public class Administrate {
 		preparedStatement.setString(2, film.getFilm_abstract());
 		preparedStatement.executeUpdate();
 	}
-	public static BorderPane add_pane(Connection connection, Stage stage){
+	public static BorderPane add_pane(Connection connection, Stage stage, VBox vbox){
 		BorderPane borderPane=new BorderPane();
 		TextArea textArea=new TextArea();
 		borderPane.setCenter(textArea);

@@ -3,6 +3,9 @@ import java.util.Date;
 
 import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
 
+import javafx.scene.Parent;
+
+import java.nio.channels.SelectableChannel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,16 +34,42 @@ public class Customer {
 	public String getCustomer_pwd() {
 		return customer_pwd;
 	}
-	public void setCustomer_pwd(String customer_pwd) {
-		this.customer_pwd = customer_pwd;
+	public int get_balance(Connection connection)throws Exception{
+		PreparedStatement preparedStatement=connection.prepareStatement("select customer_balance from customer where customer_account=?");
+		preparedStatement.setString(1, customer_account);
+		ResultSet resultSet=preparedStatement.executeQuery();
+		int res=0;
+		if(resultSet.next())
+			res=resultSet.getInt("customer_balance");
+		return res;
 	}
-	public boolean purchase(Ticket ticket, Connection connection) throws SQLException{
+	public void setCustomer_pwd(String customer_pwd, Connection connection)throws Exception {
+		this.customer_pwd = customer_pwd;
+		PreparedStatement preparedStatement=connection.prepareStatement("update customer set customer_pwd=? where customer_account=?");
+		preparedStatement.setString(1, customer_pwd);
+		preparedStatement.setString(2, this.customer_account);
+		preparedStatement.executeUpdate();
+	}
+	public void topup(int amount, Connection connection)throws Exception{
+		PreparedStatement preparedStatement=connection.prepareStatement("select customer_balance from customer where customer_account=?");
+		preparedStatement.setString(1, customer_account);
+		ResultSet resultSet=preparedStatement.executeQuery();
+		int now_balance=0;
+		if(resultSet.next())
+			now_balance=resultSet.getInt("customer_balance");
+		now_balance+=amount;
+		PreparedStatement preparedStatement2=connection.prepareStatement("update customer set customer_balance=? where customer_account=?");
+		preparedStatement2.setInt(1, now_balance);
+		preparedStatement2.setString(2, customer_account);
+		preparedStatement2.executeUpdate();
+	}
+	public boolean purchase(Ticket ticket, Connection connection) throws Exception{
 		PreparedStatement preparedStatement=connection.prepareStatement("select seats from timetable where time_value=? and time_film=? and cinema=?");
 		preparedStatement.setString(1, ticket.getTicket_time());
 		preparedStatement.setString(2, ticket.getTicket_film());
 		preparedStatement.setString(3, ticket.getTicket_cinema());
 		ResultSet resultSet=preparedStatement.executeQuery();
-		if(resultSet.next() && resultSet.getInt("seats")>0){
+		if(resultSet.next() && resultSet.getInt("seats")>0 && get_balance(connection)>ticket.getTicket_value()){
 			PreparedStatement preparedStatement2=connection.prepareStatement("insert into ticket(ticket_film, ticket_value, ticket_customer, ticket_time, ticket_cinema) values(?, ?, ?, ?, ?)");
 			preparedStatement2.setString(1, ticket.getTicket_film());
 			preparedStatement2.setInt(2, ticket.getTicket_value());
@@ -56,6 +85,11 @@ public class Customer {
 			preparedStatement3.setString(3, ticket.getTicket_film());
 			preparedStatement3.setString(4, ticket.getTicket_cinema());
 			preparedStatement3.executeUpdate();
+			int new_balance=get_balance(connection)-ticket.getTicket_value();
+			PreparedStatement preparedStatement4=connection.prepareStatement("update customer set customer_balance=? where customer_account=?");
+			preparedStatement4.setInt(1, new_balance);
+			preparedStatement4.setString(2, customer_account);
+			preparedStatement4.executeUpdate();
 			return true;
 		}
 		else{
@@ -127,4 +161,79 @@ public class Customer {
 		preparedStatement.executeUpdate();
 		System.out.println("insert success");
 	}
+	
+	public boolean refund(Connection connection, Ticket ticket)throws Exception{
+		String now_date=StringHelper.getDate();
+		String film_date=ticket.getTicket_time();
+		System.out.println(now_date);
+		System.out.println(film_date);
+		if(!StringHelper.ifExceed(now_date, film_date)){
+			PreparedStatement preparedStatement=connection.prepareStatement("select ticket_value, ticket_id from ticket where ticket_customer=? and ticket_time=?");
+			preparedStatement.setString(1, ticket.getTicket_customer());
+			preparedStatement.setString(2, ticket.getTicket_time());
+			ResultSet resultSet=preparedStatement.executeQuery();
+			if(resultSet.next()){
+				int money=resultSet.getInt("ticket_value");
+				int id=resultSet.getInt("ticket_id");
+				PreparedStatement preparedStatement2=connection.prepareStatement("delete from ticket where ticket_id=?");
+				preparedStatement2.setInt(1, id);
+				preparedStatement2.executeUpdate();
+				this.topup(money, connection);
+				PreparedStatement preparedStatement3=connection.prepareStatement("select seats from timetable where time_film=? and time_value=? and cinema=?");
+				preparedStatement3.setString(1, ticket.getTicket_film());
+				preparedStatement3.setString(2, ticket.getTicket_time());
+				preparedStatement3.setString(3, ticket.getTicket_cinema());
+				ResultSet resultSet2=preparedStatement3.executeQuery();
+				int seats=0;
+				if(resultSet2.next())
+					seats=resultSet2.getInt("seats");
+				System.out.println(seats);
+				seats+=1;
+				System.out.println(seats);
+				PreparedStatement preparedStatement4=connection.prepareStatement("update timetable set seats=? where time_film=? and time_value=? and cinema=?");
+				preparedStatement4.setInt(1, seats);
+				preparedStatement4.setString(2, ticket.getTicket_film());
+				preparedStatement4.setString(3, ticket.getTicket_time());
+				preparedStatement4.setString(4, ticket.getTicket_cinema());
+				preparedStatement4.executeUpdate();
+			}
+			return true;
+		}
+		return false;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

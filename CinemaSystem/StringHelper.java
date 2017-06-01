@@ -1,5 +1,8 @@
 package CinemaSystem;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class StringHelper {
 	public static String cut(String string, int len){
 		int now=len;
@@ -14,15 +17,27 @@ public class StringHelper {
 		}
 		return sBuilder.toString();
 	}
+	public static boolean ifExceed(String now_date, String film_date){
+		int len=now_date.length();
+		for(int i=0; i<len; i++){
+			if(film_date.charAt(i)<now_date.charAt(i))
+				return true;
+			else if(film_date.charAt(i)>now_date.charAt(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	public static String getDate(){
+		Date date=new Date();
+		long times=date.getTime();
+		SimpleDateFormat format=new SimpleDateFormat("MM-dd HH:mm");
+		String dateString=format.format(times);
+		return dateString;
+	}
 	public static void main(String[] args) {
-		String string2="aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab aaab";
-		System.out.println(Character.isWhitespace(string2.charAt(24)));
-		String string="aaaaaaaaaaaaaaaaaaaaaaaaaab aaaaaaaaaaaaaaaaaaaaaaaaaaab aaaaaaa"
-	 			+ "aaaaab aaaaaaaab aaaaaaaaaab aaaaaaab aaaaaab aaaaab aaaaab aab aa"
-				+ "aab aab aaaaaaab aaaaaaab aaaaaaaaab aaaaaab aaaaaaaaab aaaaaaaab aaaaaaaab aaa"
-				+ "aaaaab aab aaaaaab aaaaaaab aaaaaaab aaaaaaaab aaaaaab aaaaaaab aaaaaab aaa";
-//		StringBuilder stringBuilder=new StringBuilder(string);
-//		stringBuilder.insert(3, "\r\n");
-		System.out.println(cut(string, 70));
+		String now_date="06-01 20:47";
+		String film_date="06-05 12:00";
+		System.out.println(ifExceed(now_date, film_date));
 	}
 }
